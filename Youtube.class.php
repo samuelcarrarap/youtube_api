@@ -3,7 +3,7 @@
 	{
 
 		private function WebRequest($url = ''){
-			if($url == '') return array("error"=>"No URL");
+			if($url == '') return array("error"=>"Undefined URL");
 			$request = @file_get_contents($url);
 			if(!$request) return array("error"=>"Connection failed");
 			return $request;	
@@ -11,9 +11,9 @@
 
 		function PlayList($next = ''){
 			$apikey = @$this->apikey;
-			if(!$apikey) return array("error"=>"No API Key");
+			if(!$apikey) return array("error"=>"Undefined API Key");
 			$playlistid = @$this->playlistid;
-			if(!$playlistid) return array("error"=>"No Playlist ID");
+			if(!$playlistid) return array("error"=>"Undefined Playlist ID");
 			$maxresults = @$this->maxresults ? $this->maxresults : 50;
 			$url  = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet";
 			$url .= "&key=".$apikey;
@@ -46,9 +46,9 @@
 
 		function Video(){
 			$apikey = @$this->apikey;
-			if(!$apikey) return array("error"=>"No API Key");
+			if(!$apikey) return array("error"=>"Undefined API Key");
 			$videoid = @$this->videoid;
-			if(!$videoid) return array("error"=>"No Video ID");
+			if(!$videoid) return array("error"=>"Undefined Video ID");
 			$url  = "https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics,status";
 			$url .= "&id=".$videoid;
 			$url .= "&key=".$apikey;
@@ -105,9 +105,9 @@
 
 		function Channel(){
 			$apikey = @$this->apikey;
-			if(!$apikey) return array("error"=>"No API Key");
+			if(!$apikey) return array("error"=>"Undefined API Key");
 			$channelid = @$this->channelid;
-			if(!$channelid) return array("error"=>"No Channel ID");
+			if(!$channelid) return array("error"=>"Undefined Channel ID");
 			$url  = "https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics,status";
 			$url .= "&id=".$channelid;
 			$url .= "&key=".$apikey;
@@ -171,13 +171,16 @@
 
 		function ChannelVideos($next = ''){
 			$apikey = @$this->apikey;
-			if(!$apikey) return array("error"=>"No API Key");
+			if(!$apikey) return array("error"=>"Undefined API Key");
 			$channelid = @$this->channelid;
-			if(!$channelid) return array("error"=>"No Channel ID");
+			if(!$channelid) return array("error"=>"Undefined Channel ID");
 			$maxresults = @$this->maxresults ? $this->maxresults : 50;
-			$url  = "https://www.googleapis.com/youtube/v3/search?part=snippet,id&order=date&maxResults=20";
+			$order = @$this->order ? $this->order : 'date';
+			$url  = "https://www.googleapis.com/youtube/v3/search?part=snippet,id&order=date";
 			$url .= "&channelId=".$channelid;
 			$url .= "&key=".$apikey;
+			$url .= "&maxResults=".$maxresults;
+			$url .= "&order=".$order;
 			if($next)
 				$url .= "&pageToken=".$next;
 			$request = $this->WebRequest($url);			
@@ -188,11 +191,11 @@
 
 		function TotalChannelVideos(){
 			$apikey = @$this->apikey;
-			if(!$apikey) return array("error"=>"No API Key");
+			if(!$apikey) return array("error"=>"Undefined API Key");
 			$channelid = @$this->channelid;
-			if(!$channelid) return array("error"=>"No Channel ID");
+			if(!$channelid) return array("error"=>"Undefined Channel ID");
 			$maxresults = @$this->maxresults ? $this->maxresults : 50;
-			$url  = "https://www.googleapis.com/youtube/v3/search?part=snippet,id&order=date&maxResults=20";
+			$url  = "https://www.googleapis.com/youtube/v3/search?part=snippet,id";
 			$url .= "&channelId=".$channelid;
 			$url .= "&key=".$apikey;
 			$request = $this->WebRequest($url);			
@@ -201,15 +204,16 @@
 			return isset($request['pageInfo']['totalResults']) ? $request['pageInfo']['totalResults'] : '';
 		}
 
-		function NextPageVideos(){
+		function NextPageVideos($max){
 			$apikey = @$this->apikey;
-			if(!$apikey) return array("error"=>"No API Key");
+			if(!$apikey) return array("error"=>"Undefined API Key");
 			$channelid = @$this->channelid;
-			if(!$channelid) return array("error"=>"No Channel ID");
+			if(!$channelid) return array("error"=>"Undefined Channel ID");
 			$maxresults = @$this->maxresults ? $this->maxresults : 50;
-			$url  = "https://www.googleapis.com/youtube/v3/search?part=snippet,id&order=date&maxResults=20";
+			$url  = "https://www.googleapis.com/youtube/v3/search?part=snippet,id";
 			$url .= "&channelId=".$channelid;
 			$url .= "&key=".$apikey;
+			$url .= "&maxResults=".$maxresults;
 			$request = $this->WebRequest($url);
 			if(isset($request['error'])) return $request;
 			return isset($request['nextPageToken']) ? $request['nextPageToken'] : '';
