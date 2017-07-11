@@ -174,8 +174,27 @@
 			if(!$apikey) return array("error"=>"Undefined API Key");
 			$channelid = @$this->channelid;
 			if(!$channelid) return array("error"=>"Undefined Channel ID");
-			$maxresults = @$this->maxresults ? $this->maxresults : 50;
-			$order = @$this->order ? $this->order : 'date';
+			$maxresults = @$this->maxresults ? $this->maxresults : 50;			
+			switch (@$this->order) {
+				case 'rating':
+					$order = 'rating';
+					break;
+				case 'relevance':
+					$order = 'relevance';
+					break;
+				case 'title':
+					$order = 'title';
+					break;
+				case 'videos':
+					$order = 'videoCount';
+					break;
+				case 'views':
+					$order = 'viewCount';
+					break;
+				default:
+					$order = 'date';
+					break;
+			}
 			$url  = "https://www.googleapis.com/youtube/v3/search?part=snippet,id&order=date";
 			$url .= "&channelId=".$channelid;
 			$url .= "&key=".$apikey;
