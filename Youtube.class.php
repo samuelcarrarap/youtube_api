@@ -223,7 +223,7 @@
 			return isset($request['pageInfo']['totalResults']) ? $request['pageInfo']['totalResults'] : '';
 		}
 
-		function NextPageVideos($max){
+		function NextPageVideos(){
 			$apikey = @$this->apikey;
 			if(!$apikey) return array("error"=>"Undefined API Key");
 			$channelid = @$this->channelid;
@@ -236,6 +236,11 @@
 			$request = $this->WebRequest($url);
 			if(isset($request['error'])) return $request;
 			return isset($request['nextPageToken']) ? $request['nextPageToken'] : '';
+		}
+
+		function JsonResponse($method = '', $parameter = ''){
+			if($method == '') return '{"error":"Undefined Method"}';
+			return json_encode($this->$method($parameter));
 		}
 	}
 ?>
