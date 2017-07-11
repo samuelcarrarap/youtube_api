@@ -16,6 +16,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+index.php
 
 # =========================
 # Operating System Files
@@ -27,9 +28,11 @@ $RECYCLE.BIN/
 .DS_Store
 .AppleDouble
 .LSOverride
+index.php
 
 # Thumbnails
 ._*
+index.php
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
@@ -46,5 +49,4 @@ index.php
 Network Trash Folder
 Temporary Items
 .apdisk
-index.php
 index.php
